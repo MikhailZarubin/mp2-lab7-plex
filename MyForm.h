@@ -1,5 +1,5 @@
 #pragma once
-
+#include"Plex.h"
 namespace CppWinForm1 {
 
 	using namespace System;
@@ -14,10 +14,16 @@ namespace CppWinForm1 {
 	/// </summary>
 	public ref class MyForm : public System::Windows::Forms::Form
 	{
+		Graphics^ gr;
 	public:
 		MyForm(void)
 		{
 			InitializeComponent();
+			gr = this->CreateGraphics();
+			TRoot* figure;
+			figure = new TPoint(100, 100);
+			figure->show(gr);
+			gr->DrawLine(Pens::Black, 1, 1, 10, 10);
 			//
 			//TODO: Add the constructor code here
 			//
@@ -49,7 +55,7 @@ namespace CppWinForm1 {
 		void InitializeComponent(void)
 		{
 			this->components = gcnew System::ComponentModel::Container();
-			this->Size = System::Drawing::Size(1000,1000);
+			this->Size = System::Drawing::Size(500,500);
 			this->Text = L"MyForm";
 			this->Padding = System::Windows::Forms::Padding(0);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
