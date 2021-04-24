@@ -45,3 +45,34 @@ void TPoint:: hide(Graphics ^ gr)
 	gr->DrawLine(Pens::White, max(0, x - 2), max(0, y - 2), x+2, y+2);
 	visible = true;
 }
+TChart::TChart():TRoot()
+{
+	pFirst = NULL;
+	pLast = NULL;
+}
+int TChart::GetSize() {
+	int size = 0;
+	if (pFirst)
+		size++;
+	if (pLast)
+		size++;
+	return size;
+}
+void TChart::SetFirst(TRoot* p)
+{
+	TPoint* pPoint = dynamic_cast<TPoint*>(p);
+	TChart* pChart = dynamic_cast<TChart*>(p);
+	if (pPoint || pChart)
+		pFirst = p;
+}
+void TChart::SetLast(TRoot* p)
+{
+	TPoint* pPoint = dynamic_cast<TPoint*>(p);
+	TChart* pChart = dynamic_cast<TChart*>(p);
+	if (pPoint || pChart)
+		pLast = p;
+}
+void TChart::show(Graphics^ gr)
+{
+	TLine CurrLine;
+}
