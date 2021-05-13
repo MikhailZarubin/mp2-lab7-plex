@@ -38,8 +38,8 @@ int TPoint::GetY() const {
 void TPoint::show(Graphics^ gr)
 {
 	Pen^ pen;
-	pen = gcnew Pen(Color::BlueViolet);
-	pen->Width = 3.f;
+	pen = gcnew Pen(Color::Black);
+	pen->Width = 4.f;
 	gr->DrawEllipse(pen, x, y, 4, 4);
 	visible = true;
 }
@@ -47,7 +47,7 @@ void TPoint:: hide(Graphics ^ gr)
 {
 	Pen^ pen;
 	pen = gcnew Pen(Color::White);
-	pen->Width = 3.f;
+	pen->Width = 4.f;
 	gr->DrawEllipse(pen, x, y, 4, 4);
 	visible = true;
 }
@@ -134,10 +134,10 @@ void TChart::show(Graphics^ gr)
 				st.push(CurrLine);
 			}
 		}
-		if (!CurrLine.pFp && !CurrLine.pLp)
+		if (CurrLine.pFp && CurrLine.pLp)
 		{
 			Pen^ pen;
-			pen = gcnew Pen(Color::RosyBrown);
+			pen = gcnew Pen(Color::Black);
 			pen->Width = 3.f;
 			gr->DrawLine(pen, CurrLine.pFp->GetX(), CurrLine.pFp->GetY(), CurrLine.pLp->GetX(), CurrLine.pLp->GetY());
 			pp = CurrLine.pLp;
@@ -206,7 +206,7 @@ void TChart::hide(Graphics^ gr)
 		{
 			Pen^ pen;
 			pen = gcnew Pen(Color::White);
-			pen->Width = 3.f;
+			pen->Width = 1.f;
 			gr->DrawLine(pen, CurrLine.pFp->GetX(), CurrLine.pFp->GetY(), CurrLine.pLp->GetX(), CurrLine.pLp->GetY());
 			pp = CurrLine.pLp;
 			if (!st.empty())
