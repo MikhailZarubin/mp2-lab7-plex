@@ -25,7 +25,6 @@ class TPoint : public TRoot
 {
 protected: 
 	int x, y;
-	std::stack<TLine> st;
 public:
 	TPoint(int x1 = 0, int y1 = 0);
 	void SetX(int val);
@@ -38,11 +37,14 @@ public:
 class TChart :public TRoot
 {
 	TRoot* pFirst, * pLast;
+	std::stack<TLine> st;
 public:
 	TChart();
 	int GetSize();
 	void SetFirst(TRoot* p);
 	void SetLast(TRoot* p);
+	TRoot* GetFisrt();
+	TRoot* GetLast();
 	void show(Graphics^ gr) override;
 	void hide(Graphics^ gr) override;
 };

@@ -37,12 +37,18 @@ int TPoint::GetY() const {
 }
 void TPoint::show(Graphics^ gr)
 {
-	gr->DrawLine(Pens::Black, max(0, x - 2), max(0, y - 2), x+2, y+2);
+	Pen^ pen;
+	pen = gcnew Pen(Color::BlueViolet);
+	pen->Width = 3.f;
+	gr->DrawEllipse(pen, x, y, 4, 4);
 	visible = true;
 }
 void TPoint:: hide(Graphics ^ gr)
 {
-	gr->DrawLine(Pens::White, max(0, x - 2), max(0, y - 2), x+2, y+2);
+	Pen^ pen;
+	pen = gcnew Pen(Color::White);
+	pen->Width = 3.f;
+	gr->DrawEllipse(pen, x, y, 4, 4);
 	visible = true;
 }
 TChart::TChart():TRoot()
@@ -72,7 +78,147 @@ void TChart::SetLast(TRoot* p)
 	if (pPoint || pChart)
 		pLast = p;
 }
+TRoot* TChart::GetFisrt()
+{
+	return pFirst;
+}
+TRoot* TChart::GetLast()
+{
+	return pLast;
+}
 void TChart::show(Graphics^ gr)
 {
 	TLine CurrLine;
+	TRoot* pr;
+	TPoint* pp;
+	CurrLine.pChart = this;
+	CurrLine.pFp = CurrLine.pLp = NULL;
+	while (!st.empty())
+	{
+		st.pop();
+	}
+	st.push(CurrLine);
+	while (!st.empty())
+	{
+		CurrLine = st.top();
+		st.pop();
+		while (!CurrLine.pFp)
+		{
+			pr = CurrLine.pChart->GetFisrt();
+			pp = dynamic_cast<TPoint*>(pr);
+			if (pp)
+			{
+				CurrLine.pFp = pp;
+				pp->show(gr);
+			}
+			else
+			{
+				st.push(CurrLine);
+				CurrLine.pChart = dynamic_cast<TChart*>(pr);
+			}
+		}
+		if (!CurrLine.pLp)
+		{
+			pr = CurrLine.pChart->GetLast();
+			pp = dynamic_cast<TPoint*>(pr);
+			if (pp)
+			{
+				CurrLine.pLp = pp;
+				pp->show(gr);
+			}
+			else
+			{
+				st.push(CurrLine);
+				CurrLine.pChart = dynamic_cast<TChart*>(pr);
+				CurrLine.pFp = NULL;
+				st.push(CurrLine);
+			}
+		}
+		if (!CurrLine.pFp && !CurrLine.pLp)
+		{
+			Pen^ pen;
+			pen = gcnew Pen(Color::RosyBrown);
+			pen->Width = 3.f;
+			gr->DrawLine(pen, CurrLine.pFp->GetX(), CurrLine.pFp->GetY(), CurrLine.pLp->GetX(), CurrLine.pLp->GetY());
+			pp = CurrLine.pLp;
+			if (!st.empty())
+			{
+				CurrLine = st.top();
+				st.pop();
+				if (!CurrLine.pFp)
+					CurrLine.pFp = pp;
+				else
+					CurrLine.pLp = pp;
+				st.push(CurrLine);
+			}
+		}
+	}
+}
+void TChart::hide(Graphics^ gr)
+{
+	TLine CurrLine;
+	TRoot* pr;
+	TPoint* pp;
+	CurrLine.pChart = this;
+	CurrLine.pFp = CurrLine.pLp = NULL;
+	while (!st.empty())
+	{
+		st.pop();
+	}
+	st.push(CurrLine);
+	while (!st.empty())
+	{
+		CurrLine = st.top();
+		st.pop();
+		while (!CurrLine.pFp)
+		{
+			pr = CurrLine.pChart->GetFisrt();
+			pp = dynamic_cast<TPoint*>(pr);
+			if (pp)
+			{
+				CurrLine.pFp = pp;
+				pp->show(gr);
+			}
+			else
+			{
+				st.push(CurrLine);
+				CurrLine.pChart = dynamic_cast<TChart*>(pr);
+			}
+		}
+		if (!CurrLine.pLp)
+		{
+			pr = CurrLine.pChart->GetLast();
+			pp = dynamic_cast<TPoint*>(pr);
+			if (pp)
+			{
+				CurrLine.pLp = pp;
+				pp->show(gr);
+			}
+			else
+			{
+				st.push(CurrLine);
+				CurrLine.pChart = dynamic_cast<TChart*>(pr);
+				CurrLine.pFp = NULL;
+				st.push(CurrLine);
+			}
+		}
+		if (!CurrLine.pFp && !CurrLine.pLp)
+		{
+			Pen^ pen;
+			pen = gcnew Pen(Color::White);
+			pen->Width = 3.f;
+			gr->DrawLine(pen, CurrLine.pFp->GetX(), CurrLine.pFp->GetY(), CurrLine.pLp->GetX(), CurrLine.pLp->GetY());
+			pp = CurrLine.pLp;
+			if (!st.empty())
+			{
+				CurrLine = st.top();
+				st.pop();
+				if (!CurrLine.pFp)
+					CurrLine.pFp = pp;
+				else
+					CurrLine.pLp = pp;
+				st.push(CurrLine);
+			}
+		}
+	}
 }
