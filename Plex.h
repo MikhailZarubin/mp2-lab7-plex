@@ -2,6 +2,8 @@
 #include<iostream>
 #include<stack>
 #include<windows.h>
+#include<cmath>
+
 using namespace System::Drawing;
 class TRoot;
 class TPoint;
@@ -47,5 +49,6 @@ public:
 	TRoot* GetLast();
 	void show(Graphics^ gr) override;
 	void hide(Graphics^ gr) override;
+	bool InsLine(Graphics^ gr, TChart* line);
 };
 

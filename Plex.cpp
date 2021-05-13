@@ -202,7 +202,7 @@ void TChart::hide(Graphics^ gr)
 				st.push(CurrLine);
 			}
 		}
-		if (!CurrLine.pFp && !CurrLine.pLp)
+		if (CurrLine.pFp && CurrLine.pLp)
 		{
 			Pen^ pen;
 			pen = gcnew Pen(Color::White);
@@ -221,4 +221,99 @@ void TChart::hide(Graphics^ gr)
 			}
 		}
 	}
+}
+bool TChart::InsLine(Graphics^ gr,TChart* line)
+{
+	TPoint* first = dynamic_cast<TPoint*>(line->GetFisrt());
+	TPoint* last = dynamic_cast<TPoint*>(line->GetLast());
+	TLine CurrLine;
+	TRoot* pr;
+	TPoint* pp;
+	CurrLine.pChart = this;
+	CurrLine.pFp = CurrLine.pLp = NULL;
+	while (!st.empty())
+	{
+		st.pop();
+	}
+	st.push(CurrLine);
+	while (!st.empty())
+	{
+		CurrLine = st.top();
+		st.pop();
+		while (!CurrLine.pFp)
+		{
+			pr = CurrLine.pChart->GetFisrt();
+			pp = dynamic_cast<TPoint*>(pr);
+			if (pp)
+			{
+				CurrLine.pFp = pp;
+				if (abs(pp->GetX() - first->GetX()) < 2 && abs(pp->GetY()-first->GetY())<2)
+				{
+					CurrLine.pChart->SetFirst(line);
+					return true;
+				}
+				else if (abs(pp->GetX() - last->GetX()) < 2 && abs(pp->GetY() - last->GetY()) < 2)
+				{
+					CurrLine.pChart->SetLast(line);
+					return true;
+				}		
+			}
+			else
+			{
+				st.push(CurrLine);
+				CurrLine.pChart = dynamic_cast<TChart*>(pr);
+			}
+		}
+		if (!CurrLine.pLp)
+		{
+			pr = CurrLine.pChart->GetLast();
+			pp = dynamic_cast<TPoint*>(pr);
+			if (pp)
+			{
+				CurrLine.pLp = pp;
+				if (abs(pp->GetX() - first->GetX()) < 2 && abs(pp->GetY() - first->GetY()) < 2)
+				{
+					CurrLine.pChart->SetFirst(line);
+					return true;
+				}
+				else if (abs(pp->GetX() - last->GetX()) < 2 && abs(pp->GetY() - last->GetY()) < 2)
+				{
+					CurrLine.pChart->SetLast(line);
+					return true;
+				}
+			}
+			else
+			{
+				st.push(CurrLine);
+				CurrLine.pChart = dynamic_cast<TChart*>(pr);
+				CurrLine.pFp = NULL;
+				st.push(CurrLine);
+			}
+		}
+		if (CurrLine.pFp && CurrLine.pLp)
+		{
+			pp = CurrLine.pLp;
+			if (abs(pp->GetX() - first->GetX()) < 2 && abs(pp->GetY() - first->GetY()) < 2)
+			{
+				CurrLine.pChart->SetFirst(line);
+				return true;
+			}
+			else if (abs(pp->GetX() - last->GetX()) < 2 && abs(pp->GetY() - last->GetY()) < 2)
+			{
+				CurrLine.pChart->SetLast(line);
+				return true;
+			}
+			if (!st.empty())
+			{
+				CurrLine = st.top();
+				st.pop();
+				if (!CurrLine.pFp)
+					CurrLine.pFp = pp;
+				else
+					CurrLine.pLp = pp;
+				st.push(CurrLine);
+			}
+		}
+	}
+	return false;
 }
