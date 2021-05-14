@@ -275,8 +275,10 @@ namespace CppWinForm1 {
 			}
 			else
 			{
-				this->textBox5->Text = L"Линия добавлена не к плексу\r\n";
-				ch->show(gr);
+				this->textBox5->Text = L"Линия не добавлена\r\n";
+				TPoint* p1 = dynamic_cast<TPoint*>(ch->GetFisrt());
+				TPoint* p2 = dynamic_cast<TPoint*>(ch->GetLast());
+				gr->DrawLine(Pens::Green, p1->GetX(), p1->GetY(), p2->GetX(), p2->GetY());
 			}
 		
 		}

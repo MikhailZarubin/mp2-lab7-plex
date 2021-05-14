@@ -254,7 +254,7 @@ bool TChart::InsLine(Graphics^ gr,TChart* line)
 				}
 				else if (abs(pp->GetX() - last->GetX()) < 2 && abs(pp->GetY() - last->GetY()) < 2)
 				{
-					CurrLine.pChart->SetLast(line);
+					CurrLine.pChart->SetFirst(line);
 					return true;
 				}		
 			}
@@ -273,7 +273,7 @@ bool TChart::InsLine(Graphics^ gr,TChart* line)
 				CurrLine.pLp = pp;
 				if (abs(pp->GetX() - first->GetX()) < 2 && abs(pp->GetY() - first->GetY()) < 2)
 				{
-					CurrLine.pChart->SetFirst(line);
+					CurrLine.pChart->SetLast(line);
 					return true;
 				}
 				else if (abs(pp->GetX() - last->GetX()) < 2 && abs(pp->GetY() - last->GetY()) < 2)
@@ -293,20 +293,12 @@ bool TChart::InsLine(Graphics^ gr,TChart* line)
 		if (CurrLine.pFp && CurrLine.pLp)
 		{
 			pp = CurrLine.pLp;
-			if (abs(pp->GetX() - first->GetX()) < 2 && abs(pp->GetY() - first->GetY()) < 2)
-			{
-				CurrLine.pChart->SetFirst(line);
-				return true;
-			}
-			else if (abs(pp->GetX() - last->GetX()) < 2 && abs(pp->GetY() - last->GetY()) < 2)
-			{
-				CurrLine.pChart->SetLast(line);
-				return true;
-			}
+
 			if (!st.empty())
 			{
 				CurrLine = st.top();
 				st.pop();
+
 				if (!CurrLine.pFp)
 					CurrLine.pFp = pp;
 				else
