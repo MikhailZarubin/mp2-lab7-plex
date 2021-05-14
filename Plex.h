@@ -3,8 +3,10 @@
 #include<stack>
 #include<windows.h>
 #include<cmath>
+#include<fstream>
 
 using namespace System::Drawing;
+const int MAXSIZE = 20;
 class TRoot;
 class TPoint;
 class TChart;
@@ -49,6 +51,8 @@ public:
 	TRoot* GetLast();
 	void show(Graphics^ gr) override;
 	void hide(Graphics^ gr) override;
-	bool InsLine(Graphics^ gr, TChart* line);
+	bool InsLine(TChart* line);
+	void save(std::string filename);
+	void read(std::string filename);
 };
 
