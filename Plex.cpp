@@ -35,26 +35,43 @@ int TPoint::GetX() const {
 int TPoint::GetY() const {
 	return y;
 }
-void TPoint::show(Graphics^ gr)
+void TPoint::show(Graphics^ gr, Pen^ p)
 {
-	Pen^ pen;
-	pen = gcnew Pen(Color::Black);
-	pen->Width = 4.f;
-	gr->DrawEllipse(pen, x, y, 4, 4);
+	if (p == nullptr)
+	{
+		Pen^ pen;
+		pen = gcnew Pen(Color::Black);
+		pen->Width = (float)PointWidth;
+		gr->DrawEllipse(pen, max(0, x - PointWidth * 0.5), max(0, y - PointHeight * 0.5), PointWidth, PointHeight);
+	}
+	else
+		gr->DrawEllipse(p, max(0, x - PointWidth * 0.5), max(0, y - PointHeight * 0.5), PointWidth, PointHeight);
 	visible = true;
 }
-void TPoint:: hide(Graphics ^ gr)
+void TPoint:: hide(Graphics ^ gr, Pen^ p)
 {
-	Pen^ pen;
-	pen = gcnew Pen(Color::White);
-	pen->Width = 4.f;
-	gr->DrawEllipse(pen, x, y, 4, 4);
-	visible = true;
+	if (p == nullptr)
+	{
+		Pen^ pen;
+		pen = gcnew Pen(Color::White);
+		pen->Width = (float)PointWidth;
+		gr->DrawEllipse(pen, max(0, x - PointWidth * 0.5), max(0, y - PointHeight * 0.5), PointWidth, PointHeight);
+	}
+	else
+		gr->DrawEllipse(p, max(0, x - PointWidth * 0.5), max(0, y - PointHeight * 0.5), PointWidth, PointHeight);
+	visible = false;
 }
 TChart::TChart():TRoot()
 {
 	pFirst = NULL;
 	pLast = NULL;
+}
+TChart::~TChart()
+{
+	if (pFirst)
+		delete pFirst;
+	if (pLast)
+		delete pLast;
 }
 int TChart::GetSize() {
 	int size = 0;
@@ -86,7 +103,7 @@ TRoot* TChart::GetLast()
 {
 	return pLast;
 }
-void TChart::show(Graphics^ gr)
+void TChart::show(Graphics^ gr, Pen^ p)
 {
 	TLine CurrLine;
 	TRoot* pr;
@@ -109,7 +126,7 @@ void TChart::show(Graphics^ gr)
 			if (pp)
 			{
 				CurrLine.pFp = pp;
-				pp->show(gr);
+				pp->show(gr, p);
 			}
 			else
 			{
@@ -124,7 +141,7 @@ void TChart::show(Graphics^ gr)
 			if (pp)
 			{
 				CurrLine.pLp = pp;
-				pp->show(gr);
+				pp->show(gr, p);
 			}
 			else
 			{
@@ -136,10 +153,15 @@ void TChart::show(Graphics^ gr)
 		}
 		if (CurrLine.pFp && CurrLine.pLp)
 		{
-			Pen^ pen;
-			pen = gcnew Pen(Color::Black);
-			pen->Width = 3.f;
-			gr->DrawLine(pen, CurrLine.pFp->GetX(), CurrLine.pFp->GetY(), CurrLine.pLp->GetX(), CurrLine.pLp->GetY());
+			if (p == nullptr) 
+			{
+				Pen^ pen;
+				pen = gcnew Pen(Color::Black);
+				pen->Width = (float)LineWidth;
+				gr->DrawLine(pen, CurrLine.pFp->GetX(), CurrLine.pFp->GetY(), CurrLine.pLp->GetX(), CurrLine.pLp->GetY());
+			}
+			else
+				gr->DrawLine(p, CurrLine.pFp->GetX(), CurrLine.pFp->GetY(), CurrLine.pLp->GetX(), CurrLine.pLp->GetY());
 			pp = CurrLine.pLp;
 			if (!st.empty())
 			{
@@ -154,7 +176,7 @@ void TChart::show(Graphics^ gr)
 		}
 	}
 }
-void TChart::hide(Graphics^ gr)
+void TChart::hide(Graphics^ gr, Pen^ p)
 {
 	TLine CurrLine;
 	TRoot* pr;
@@ -177,7 +199,7 @@ void TChart::hide(Graphics^ gr)
 			if (pp)
 			{
 				CurrLine.pFp = pp;
-				pp->show(gr);
+				pp->hide(gr, p);
 			}
 			else
 			{
@@ -192,7 +214,7 @@ void TChart::hide(Graphics^ gr)
 			if (pp)
 			{
 				CurrLine.pLp = pp;
-				pp->show(gr);
+				pp->hide(gr, p);
 			}
 			else
 			{
@@ -204,14 +226,15 @@ void TChart::hide(Graphics^ gr)
 		}
 		if (CurrLine.pFp && CurrLine.pLp)
 		{
-			Pen^ pen;
-			pen = gcnew Pen(Color::White);
-			pen->Width = 3.f;
-			gr->DrawLine(pen, CurrLine.pFp->GetX(), CurrLine.pFp->GetY(), CurrLine.pLp->GetX(), CurrLine.pLp->GetY());
-			pen = gcnew Pen(Color::White);
-			pen->Width = 4.f;
-			gr->DrawEllipse(pen, CurrLine.pFp->GetX(), CurrLine.pFp->GetY(), 4, 4);
-			gr->DrawEllipse(pen, CurrLine.pLp->GetX(), CurrLine.pLp->GetY(), 4, 4);
+			if (p == nullptr)
+			{
+				Pen^ pen;
+				pen = gcnew Pen(Color::White);
+				pen->Width = (float)LineWidth;
+				gr->DrawLine(pen, CurrLine.pFp->GetX(), CurrLine.pFp->GetY(), CurrLine.pLp->GetX(), CurrLine.pLp->GetY());
+			}
+			else
+				gr->DrawLine(p, CurrLine.pFp->GetX(), CurrLine.pFp->GetY(), CurrLine.pLp->GetX(), CurrLine.pLp->GetY());
 			pp = CurrLine.pLp;
 			if (!st.empty())
 			{

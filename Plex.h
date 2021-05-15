@@ -7,6 +7,9 @@
 
 using namespace System::Drawing;
 const int MAXSIZE = 20;
+const int PointWidth = 4;
+const int PointHeight = 4;
+const int LineWidth = 3;
 class TRoot;
 class TPoint;
 class TChart;
@@ -22,8 +25,8 @@ public:
 	TRoot();
 	bool IsVisible();
 	bool IsActive();
-	virtual void show(Graphics^ gr) = 0;
-	virtual void hide(Graphics^ gr) = 0;
+	virtual void show(Graphics^ gr, Pen^ p = nullptr) = 0;
+	virtual void hide(Graphics^ gr, Pen^ p = nullptr) = 0;
 };
 class TPoint : public TRoot 
 {
@@ -35,8 +38,8 @@ public:
 	void SetY(int val);
 	int GetX() const;
 	int GetY() const;
-	void show(Graphics^ gr) override;
-	void hide(Graphics^ gr) override;
+	void show(Graphics^ gr, Pen^ p = nullptr) override;
+	void hide(Graphics^ gr, Pen^ p = nullptr) override;
 };
 class TChart :public TRoot
 {
@@ -44,13 +47,14 @@ class TChart :public TRoot
 	std::stack<TLine> st;
 public:
 	TChart();
+	~TChart();
 	int GetSize();
 	void SetFirst(TRoot* p);
 	void SetLast(TRoot* p);
 	TRoot* GetFisrt();
 	TRoot* GetLast();
-	void show(Graphics^ gr) override;
-	void hide(Graphics^ gr) override;
+	void show(Graphics^ gr, Pen^ p = nullptr) override;
+	void hide(Graphics^ gr, Pen^ p = nullptr) override;
 	bool InsLine(TChart* line);
 	void save(std::string filename);
 	void read(std::string filename);

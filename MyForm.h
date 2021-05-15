@@ -1,6 +1,7 @@
 #pragma once
 #include <msclr/marshal_cppstd.h>
 #include"Plex.h"
+std::string flag = "Линия добавлена не к плексу";
 namespace CppWinForm1 {
 
 	using namespace System;
@@ -27,9 +28,9 @@ namespace CppWinForm1 {
 	private: System::Windows::Forms::Label^ label5;
 	private: System::Windows::Forms::TextBox^ textBox3;
 	private: System::Windows::Forms::TextBox^ textBox4;
-		   bool f1,f2, res;
+		   bool f1, f2, res;
 	private: System::Windows::Forms::TextBox^ textBox5;
-		   Pen^ error;
+		   Pen^ ErrorPoint, ^ ErrorLine;
 	private: System::Windows::Forms::Button^ button3;
 	private: System::Windows::Forms::Button^ button4;
 	private: System::Windows::Forms::Button^ button5;
@@ -37,16 +38,20 @@ namespace CppWinForm1 {
 	private: System::Windows::Forms::TextBox^ textBox6;
 	private: System::Windows::Forms::Button^ button7;
 	private: System::Windows::Forms::TextBox^ textBox7;
-		   TChart* chart;
+	private: System::Windows::Forms::Button^ button8;
+	private: System::Windows::Forms::Button^ button9;
+		   TChart* chart, * ch;
+
 	public:
 		MyForm(void)
 		{
 			InitializeComponent();
 			gr = this->CreateGraphics();
-			error = gcnew Pen(Color::Red);
-			error->Width = 3.f;
+			ErrorPoint = ErrorLine = gcnew Pen(Color::Red);
+			ErrorPoint->Width = (float)(PointWidth);
+			ErrorLine->Width = (float)(LineWidth);
 			point = NULL;
-			chart = NULL;
+			ch = chart = NULL;
 			f1 = f2 = res = false;
 			//
 			//TODO: Add the constructor code here
@@ -100,6 +105,8 @@ namespace CppWinForm1 {
 			this->textBox6 = (gcnew System::Windows::Forms::TextBox());
 			this->button7 = (gcnew System::Windows::Forms::Button());
 			this->textBox7 = (gcnew System::Windows::Forms::TextBox());
+			this->button8 = (gcnew System::Windows::Forms::Button());
+			this->button9 = (gcnew System::Windows::Forms::Button());
 			this->SuspendLayout();
 			// 
 			// button1
@@ -206,11 +213,11 @@ namespace CppWinForm1 {
 			this->textBox5->Enabled = false;
 			this->textBox5->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 8.25F, static_cast<System::Drawing::FontStyle>((System::Drawing::FontStyle::Bold | System::Drawing::FontStyle::Italic)),
 				System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(204)));
-			this->textBox5->Location = System::Drawing::Point(31, 574);
+			this->textBox5->Location = System::Drawing::Point(3, 435);
 			this->textBox5->Name = L"textBox5";
 			this->textBox5->Size = System::Drawing::Size(200, 13);
 			this->textBox5->TabIndex = 11;
-			this->textBox5->Text = L"Добавления линии не было";
+			this->textBox5->Text = L"Ожидание добавления";
 			// 
 			// button3
 			// 
@@ -224,7 +231,7 @@ namespace CppWinForm1 {
 			// 
 			// button4
 			// 
-			this->button4->Location = System::Drawing::Point(358, 593);
+			this->button4->Location = System::Drawing::Point(356, 430);
 			this->button4->Name = L"button4";
 			this->button4->Size = System::Drawing::Size(124, 23);
 			this->button4->TabIndex = 13;
@@ -234,7 +241,7 @@ namespace CppWinForm1 {
 			// 
 			// button5
 			// 
-			this->button5->Location = System::Drawing::Point(4, 593);
+			this->button5->Location = System::Drawing::Point(3, 457);
 			this->button5->Name = L"button5";
 			this->button5->Size = System::Drawing::Size(184, 23);
 			this->button5->TabIndex = 14;
@@ -244,7 +251,7 @@ namespace CppWinForm1 {
 			// 
 			// button6
 			// 
-			this->button6->Location = System::Drawing::Point(358, 622);
+			this->button6->Location = System::Drawing::Point(357, 459);
 			this->button6->Name = L"button6";
 			this->button6->Size = System::Drawing::Size(124, 23);
 			this->button6->TabIndex = 15;
@@ -254,7 +261,7 @@ namespace CppWinForm1 {
 			// 
 			// textBox6
 			// 
-			this->textBox6->Location = System::Drawing::Point(194, 595);
+			this->textBox6->Location = System::Drawing::Point(193, 459);
 			this->textBox6->Name = L"textBox6";
 			this->textBox6->Size = System::Drawing::Size(157, 20);
 			this->textBox6->TabIndex = 16;
@@ -262,7 +269,7 @@ namespace CppWinForm1 {
 			// 
 			// button7
 			// 
-			this->button7->Location = System::Drawing::Point(4, 624);
+			this->button7->Location = System::Drawing::Point(3, 488);
 			this->button7->Name = L"button7";
 			this->button7->Size = System::Drawing::Size(184, 23);
 			this->button7->TabIndex = 18;
@@ -272,18 +279,42 @@ namespace CppWinForm1 {
 			// 
 			// textBox7
 			// 
-			this->textBox7->Location = System::Drawing::Point(194, 624);
+			this->textBox7->Location = System::Drawing::Point(193, 488);
 			this->textBox7->Name = L"textBox7";
 			this->textBox7->Size = System::Drawing::Size(158, 20);
 			this->textBox7->TabIndex = 19;
 			this->textBox7->Text = L"new_plex.txt";
+			// 
+			// button8
+			// 
+			this->button8->Location = System::Drawing::Point(209, 430);
+			this->button8->Name = L"button8";
+			this->button8->Size = System::Drawing::Size(132, 23);
+			this->button8->TabIndex = 20;
+			this->button8->Text = L"Удалить линию";
+			this->button8->UseVisualStyleBackColor = true;
+			this->button8->Visible = true;
+			this->button8->Enabled = false;
+			this->button8->Click += gcnew System::EventHandler(this, &MyForm::button8_Click);
+			// 
+			// button9
+			// 
+			this->button9->Location = System::Drawing::Point(357, 488);
+			this->button9->Name = L"button9";
+			this->button9->Size = System::Drawing::Size(124, 23);
+			this->button9->TabIndex = 21;
+			this->button9->Text = L"Удалить плекс";
+			this->button9->UseVisualStyleBackColor = true;
+			this->button9->Click += gcnew System::EventHandler(this, &MyForm::button9_Click);
 			// 
 			// MyForm
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->BackColor = System::Drawing::SystemColors::Window;
-			this->ClientSize = System::Drawing::Size(485, 652);
+			this->ClientSize = System::Drawing::Size(485, 517);
+			this->Controls->Add(this->button9);
+			this->Controls->Add(this->button8);
 			this->Controls->Add(this->textBox7);
 			this->Controls->Add(this->button7);
 			this->Controls->Add(this->textBox6);
@@ -312,15 +343,15 @@ namespace CppWinForm1 {
 		}
 #pragma endregion
 	private: System::Void button1_Click(System::Object^ sender, System::EventArgs^ e) {
-		if (f1&&f2)
+		if (f1 && f2)
 		{
-			std::string first="", last="", tmp="";
+			std::string first = "", last = "", tmp = "";
 			first = msclr::interop::marshal_as<std::string>(this->textBox3->Text);
-			last= msclr::interop::marshal_as<std::string>(this->textBox4->Text);
+			last = msclr::interop::marshal_as<std::string>(this->textBox4->Text);
 			this->textBox3->Text = L"";
 			this->textBox4->Text = L"";
 			f1 = f2 = false;
-			TChart* ch = new TChart;
+			ch = new TChart;
 			point = new TPoint;
 			for (int i = 0; i < first.size(); i++)
 			{
@@ -359,30 +390,34 @@ namespace CppWinForm1 {
 			}
 			if (res)
 			{
-				this->textBox5->Text = L"Линия добавлена к плексу\r\n";
+				this->textBox5->Text = L"Линия добавлена к плексу";
 				chart->show(gr);
 			}
 			else
 			{
-				this->textBox5->Text = L"Линия добавлена не к плексу\r\n";
+				this->textBox5->Text = L"Линия добавлена не к плексу";
 				TPoint* p1 = dynamic_cast<TPoint*>(ch->GetFisrt());
 				TPoint* p2 = dynamic_cast<TPoint*>(ch->GetLast());
-				gr->DrawLine(error, p1->GetX(), p1->GetY(), p2->GetX(), p2->GetY());
+				p1->hide(gr);
+				p2->hide(gr);
+				ch->show(gr, ErrorPoint);
+				this->button8->Enabled = true;
 			}
-		
+
 		}
 	}
 
 	private: System::Void button2_Click(System::Object^ sender, System::EventArgs^ e) {
+		this->button8->Enabled = false;
 		point = new TPoint;
 		point->SetX(Convert::ToInt32(textBox1->Text));
 		point->SetY(Convert::ToInt32(textBox2->Text));
 		point->show(gr);
-	    this->textBox3->Text = Convert::ToString(point->GetX());
-	    this->textBox3->Text += L",";
+		this->textBox3->Text = Convert::ToString(point->GetX());
+		this->textBox3->Text += L",";
 		this->textBox3->Text += Convert::ToString(point->GetY());
 		f1 = true;
-		
+
 	}
 	private: System::Void button4_Click(System::Object^ sender, System::EventArgs^ e) {
 		if (chart)
@@ -399,6 +434,7 @@ namespace CppWinForm1 {
 		}
 	}
 	private: System::Void button3_Click(System::Object^ sender, System::EventArgs^ e) {
+		this->button8->Enabled = false;
 		point = new TPoint;
 		point->SetX(Convert::ToInt32(textBox1->Text));
 		point->SetY(Convert::ToInt32(textBox2->Text));
@@ -410,11 +446,24 @@ namespace CppWinForm1 {
 	}
 	private: System::Void button7_Click(System::Object^ sender, System::EventArgs^ e) {
 		std::string filename = msclr::interop::marshal_as<std::string>(this->textBox7->Text);
-		if(chart)
-		chart->hide(gr);
+		if (chart)
+			chart->hide(gr);
 		chart = new TChart;
 		chart->read(filename);
 		chart->show(gr);
 	}
-};
+	private: System::Void button9_Click(System::Object^ sender, System::EventArgs^ e) {
+		if (chart)
+			chart->hide(gr);
+		chart = NULL;
+	}
+
+	private: System::Void button8_Click(System::Object^ sender, System::EventArgs^ e) {
+		if (ch)
+			ch->hide(gr);
+		ch = NULL;
+		this->textBox5->Text = Convert::ToString("Ожидание добавления");
+	}
+
+	};
 }
