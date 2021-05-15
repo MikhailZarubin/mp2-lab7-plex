@@ -206,7 +206,7 @@ namespace CppWinForm1 {
 			this->textBox5->Enabled = false;
 			this->textBox5->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 8.25F, static_cast<System::Drawing::FontStyle>((System::Drawing::FontStyle::Bold | System::Drawing::FontStyle::Italic)),
 				System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(204)));
-			this->textBox5->Location = System::Drawing::Point(3, 368);
+			this->textBox5->Location = System::Drawing::Point(31, 574);
 			this->textBox5->Name = L"textBox5";
 			this->textBox5->Size = System::Drawing::Size(200, 13);
 			this->textBox5->TabIndex = 11;
@@ -224,7 +224,7 @@ namespace CppWinForm1 {
 			// 
 			// button4
 			// 
-			this->button4->Location = System::Drawing::Point(357, 403);
+			this->button4->Location = System::Drawing::Point(358, 593);
 			this->button4->Name = L"button4";
 			this->button4->Size = System::Drawing::Size(124, 23);
 			this->button4->TabIndex = 13;
@@ -234,7 +234,7 @@ namespace CppWinForm1 {
 			// 
 			// button5
 			// 
-			this->button5->Location = System::Drawing::Point(3, 403);
+			this->button5->Location = System::Drawing::Point(4, 593);
 			this->button5->Name = L"button5";
 			this->button5->Size = System::Drawing::Size(184, 23);
 			this->button5->TabIndex = 14;
@@ -244,7 +244,7 @@ namespace CppWinForm1 {
 			// 
 			// button6
 			// 
-			this->button6->Location = System::Drawing::Point(357, 432);
+			this->button6->Location = System::Drawing::Point(358, 622);
 			this->button6->Name = L"button6";
 			this->button6->Size = System::Drawing::Size(124, 23);
 			this->button6->TabIndex = 15;
@@ -254,7 +254,7 @@ namespace CppWinForm1 {
 			// 
 			// textBox6
 			// 
-			this->textBox6->Location = System::Drawing::Point(193, 405);
+			this->textBox6->Location = System::Drawing::Point(194, 595);
 			this->textBox6->Name = L"textBox6";
 			this->textBox6->Size = System::Drawing::Size(157, 20);
 			this->textBox6->TabIndex = 16;
@@ -262,7 +262,7 @@ namespace CppWinForm1 {
 			// 
 			// button7
 			// 
-			this->button7->Location = System::Drawing::Point(3, 432);
+			this->button7->Location = System::Drawing::Point(4, 624);
 			this->button7->Name = L"button7";
 			this->button7->Size = System::Drawing::Size(184, 23);
 			this->button7->TabIndex = 18;
@@ -272,7 +272,7 @@ namespace CppWinForm1 {
 			// 
 			// textBox7
 			// 
-			this->textBox7->Location = System::Drawing::Point(193, 434);
+			this->textBox7->Location = System::Drawing::Point(194, 624);
 			this->textBox7->Name = L"textBox7";
 			this->textBox7->Size = System::Drawing::Size(158, 20);
 			this->textBox7->TabIndex = 19;
@@ -282,7 +282,8 @@ namespace CppWinForm1 {
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
-			this->ClientSize = System::Drawing::Size(484, 461);
+			this->BackColor = System::Drawing::SystemColors::Window;
+			this->ClientSize = System::Drawing::Size(485, 652);
 			this->Controls->Add(this->textBox7);
 			this->Controls->Add(this->button7);
 			this->Controls->Add(this->textBox6);
